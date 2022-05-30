@@ -1,7 +1,8 @@
 
 #載入LineBot所需要的模組
-from flask import Flask, request, abort
-from linebot import (LineBotApi, WebhookHandler)
+import imp
+from flask import Flask,request, abort
+from linebot import(LineBotApi,WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
 
@@ -16,6 +17,24 @@ line_bot_api = LineBotApi('j7hu22/J4MsEH+LFbuJInkn8NvCxa1V0TUfSeiFLoXeQwyxMu2FCW
 handler = WebhookHandler('1103901155d758664f42b49765099061')
 
 line_bot_api.push_message('U02fc785bca1c72493e65e003e46b8db0', TextSendMessage(text='你可以開始了'))
+
+
+# 監聽所有來自 /callback 的 Post Request
+@test.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+    # get request body as text
+    body = request.get_data(as_text=True)
+    test.logger.info("Request body: " + body)
+
+# handle webhook body
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
 
 #訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
