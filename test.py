@@ -86,10 +86,13 @@ def  handle_message(event):
                             MessageAction(
                                 label=message[3:] + "歷年股利",
                                 text="歷年股利" +message[3:]),
-                        ]),
+                        ])
         ]
     )
 )
+        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+    else:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
 import os 
 #主程式
