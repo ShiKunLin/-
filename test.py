@@ -50,7 +50,7 @@ def  handle_message(event):
         template=CarouselTemplate(
             columns=[
                 CarouselColumn(
-                        thumbnail_image_url="",
+                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
@@ -63,7 +63,7 @@ def  handle_message(event):
                             ]
                         ),
                 CarouselColumn(
-                        thumbnail_image_url="",
+                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
@@ -76,7 +76,7 @@ def  handle_message(event):
                             ]
                         ),
                 CarouselColumn(
-                        thumbnail_image_url="",
+                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
