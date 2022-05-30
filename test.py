@@ -5,14 +5,11 @@ from flask import Flask,request, abort
 from linebot import(LineBotApi,WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
-import os 
+
 test = Flask(__name__)
 
 
-#主程式
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    test.run(host='0.0.0.0', port=port)
+
 
 # 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi('j7hu22/J4MsEH+LFbuJInkn8NvCxa1V0TUfSeiFLoXeQwyxMu2FCWoeUfvz/hY+w0AIUCgM1Jv2M5wDxPoYl0zT7fq1x/8uyStI4kUfDg7vye48BTqDgZpuukZWYenVH3noY2UsQx4E21VJkwjZUNQdB04t89/1O/w1cDnyilFU=')
@@ -48,3 +45,8 @@ def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     line_bot_api.reply_message(event.reply_token,message)
     
+import os 
+#主程式
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    test.run(host='0.0.0.0', port=port)
