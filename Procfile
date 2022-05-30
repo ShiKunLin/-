@@ -2,6 +2,7 @@ web: python test.py
 
 # 監聽所有來自 /callback 的 Post Request
 @test.route("/callback", methods=['POST'])
+
 def callback():
 # get X-Line-Signature header value
 signature = request.headers['X-Line-Signature']
