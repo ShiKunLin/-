@@ -50,7 +50,7 @@ def  handle_message(event):
         template=CarouselTemplate(
             columns=[
                 CarouselColumn(
-                        thumbnail_image_url="C:\Users\USER\Desktop\股票\imege.jpg",
+                        thumbnail_image_url="https://chenchenhouse.com//wp-content/uploads/2020/10/%E5%9C%96%E7%89%871-2.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
@@ -60,10 +60,10 @@ def  handle_message(event):
                             MessageAction(
                                 label=message[3:] + "個股新聞",
                                 text="個股新聞" +message[3:]),
-                        ]
-                    ),
+                            ]
+                        ),
                 CarouselColumn(
-                        thumbnail_image_url="C:\Users\USER\Desktop\股票\imege.jpg",
+                        thumbnail_image_url="https://chenchenhouse.com//wp-content/uploads/2020/10/%E5%9C%96%E7%89%871-2.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
@@ -73,10 +73,10 @@ def  handle_message(event):
                             MessageAction(
                                 label=message[3:] + "日線圖",
                                 text="日線圖" +message[3:]),
-                        ]
-                ),
+                            ]
+                        ),
                 CarouselColumn(
-                        thumbnail_image_url="C:\Users\USER\Desktop\股票\imege.jpg",
+                        thumbnail_image_url="https://chenchenhouse.com//wp-content/uploads/2020/10/%E5%9C%96%E7%89%871-2.png",
                         title = message[3:] + "股票資訊",
                         text="請點選想查詢的股票資訊",
                         actions=[
@@ -86,16 +86,17 @@ def  handle_message(event):
                             MessageAction(
                                 label=message[3:] + "歷年股利",
                                 text="歷年股利" +message[3:]),
-                        ])
-        ]
-    )
-)
+                            ]
+                        ),
+                    ]
+                )
+            )
         line_bot_api.reply_message(event.reply_token, buttons_template_message)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
-import os 
 #主程式
+import os 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     test.run(host='0.0.0.0', port=port)
