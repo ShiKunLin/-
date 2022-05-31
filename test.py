@@ -38,7 +38,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def  handle_message(event):
     message = text=event.message.text
-    if "股票" in message:
+    if "台積電股票" in message:
         buttons_template_message = TemplateSendMessage(
         alt_text= "股票資訊",
         template=CarouselTemplate(
@@ -56,11 +56,10 @@ def  handle_message(event):
                                 text="個股新聞" +message[3:]),
                             ]
                         ),
-
                     ]
-                )
+                ) 
             )
-        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        line_bot_api.reply_message(event.reply_token, "你去死")
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
