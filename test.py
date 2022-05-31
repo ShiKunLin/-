@@ -1,12 +1,15 @@
 
 #載入LineBot所需要的模組
-from email import message
-import imp
 from flask import Flask,request, abort
-from linebot import(LineBotApi,WebhookHandler)
-from linebot.exceptions import (InvalidSignatureError)
+from linebot import(LineBotApi,WebhookHandler,WebhookParser)
+from linebot.exceptions import (InvalidSignatureError,LineBotApiError)
 from linebot.models import *
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.conf import settings
+from .scraper import GetStock
 
+line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
+parser = WebhookParser(settings.LINE_CHANNEL_SECRET)    
 test = Flask(__name__)
 
 
@@ -36,65 +39,27 @@ def callback():
     except InvalidSignatureError:
         abort(400)
 
-    return 'OK'
-
-#訊息傳遞區塊
-##### 基本上程式編輯都在這個function #####
-
-@handler.add(MessageEvent, message=TextMessage)
-def  handle_message(event):
-    message = text=event.message.text
-    if "股票" in message:
-        buttons_template_message = TemplateSendMessage(
-        alt_text= "股票資訊",
-        template=CarouselTemplate(
-            columns=[
-                CarouselColumn(
-                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
-                        title = message[3:] + "股票資訊",
-                        text="請點選想查詢的股票資訊",
-                        actions=[
-                            MessageAction(
-                                label= message[3:] +"個股資訊",
-                                text= "個股資訊" + message[3:]),
-                            MessageAction(
-                                label=message[3:] + "個股新聞",
-                                text="個股新聞" +message[3:]),
-                            ]
-                        ),
-                CarouselColumn(
-                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
-                        title = message[3:] + "股票資訊",
-                        text="請點選想查詢的股票資訊",
-                        actions=[
-                            MessageAction(
-                                label= message[3:] +"最新分鐘圖",
-                                text= "最新分鐘圖" + message[3:]),
-                            MessageAction(
-                                label=message[3:] + "日線圖",
-                                text="日線圖" +message[3:]),
-                            ]
-                        ),
-                CarouselColumn(
-                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
-                        title = message[3:] + "股票資訊",
-                        text="請點選想查詢的股票資訊",
-                        actions=[
-                            MessageAction(
-                                label= message[3:] +"平均股利",
-                                text= "平均股利" + message[3:]),
-                            MessageAction(
-                                label=message[3:] + "歷年股利",
-                                text="歷年股利" +message[3:]),
-                            ]
-                        ),
-                    ]
-                )
+    try:
+        events = parser.parse(body, signature)  # 傳入的事件
+        print(events)
+    except InvalidSignatureError:
+        return HttpResponseForbidden()
+    except LineBotApiError:
+        return HttpResponseBadRequest()
+ 
+    for event in events:
+ 
+        if isinstance(event, MessageEvent):  # 如果有訊息事件
+ 
+            stock = GetStock(event.message.text)  #使用者傳入的訊息文字
+ 
+            line_bot_api.reply_message(  # 回應前五間最高人氣且營業中的餐廳訊息文字
+                    event.reply_token,
+                    TextSendMessage(text=stock.scrape())
             )
-        line_bot_api.reply_message(event.reply_token, buttons_template_message)
+        return HttpResponse()
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-
+        return HttpResponseBadRequest()
 #主程式
 import os 
 if __name__ == "__main__":
