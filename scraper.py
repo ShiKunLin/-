@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from abc import ABC, abstractmethod
 import requests
 
 def scrape(id):
