@@ -39,30 +39,7 @@ def callback():
 def  handle_message(event):
     message = text=event.message.text
     if event.message.text == "股票":
-        buttons_template_message = TemplateSendMessage(
-        alt_text= "股票資訊",
-        template=CarouselTemplate(
-            columns=[
-                CarouselColumn(
-                        thumbnail_image_url="https://histock.tw/uploadimages/51819/10c4372f6ef040e5e6f916d33e8a5ce5.png",
-                        title = message[3:] + "股票資訊",
-                        text="請點選想查詢的股票資訊",
-                        actions=[
-                            MessageAction(
-                                label= message[3:] +"個股資訊",
-                                text= "個股資訊" + message[3:]),
-                            MessageAction(
-                                label=message[3:] + "個股新聞",
-                                text="個股新聞" +message[3:]),
-                            ]
-                        ),
-                    ]
-                ) 
-            )
-        line_bot_api.reply_message(event.reply_token, buttons_template_message)
-    else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
-
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="請輸入股票代號"))
 
 #主程式
 import os 
