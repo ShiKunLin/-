@@ -39,9 +39,9 @@ def callback():
 def  handle_message(event):
     message = text=event.message.text
     if event.message.text == "2330":
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="image.png"))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="https://tw.stock.yahoo.com/quote/2330.TW"))
     elif event.message.text == "台積電":
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="image.png"))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="https://tw.stock.yahoo.com/quote/2330.TW"))
 #主程式
 import os 
 if __name__ == "__main__":
