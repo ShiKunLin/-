@@ -1,34 +1,47 @@
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 import requests
-from sympy import content
-
-
-class Stock(ABC):
-    def _init_(self, number ):
-        self.number = number #股票代號
-
+ 
+ 
+# 美食抽象類別
+class Food(ABC):
+ 
+    def __init__(self, area):
+        self.area = area  # 地區
+ 
     @abstractmethod
-
     def scrape(self):
-
         pass
-
-
-
-#股票爬蟲
-class GetStock(Stock):
-
+ 
+ 
+# 愛食記爬蟲
+class IFoodie(Food):
+ 
     def scrape(self):
         response = requests.get(
-         "https://tw.stock.yahoo.com/quote/"+self.number+".TW")
-
+            "https://ifoodie.tw/explore/" + self.area +
+            "/list?sortby=popular&opening=true")
+ 
         soup = BeautifulSoup(response.content, "html.parser")
-
-        #爬取股票資訊
-        
-        Volume = soup.find("span",{"class":"Fw(600) Fz(16px)--mobile Fz(14px) D(f) Ai(c) C($c-trend-up)"}).getText()
-        
-        Close = soup.find("span",{"class":"Jc(fe) Fz(20px) Lh(1.2) Fw(b) D(f) Ai(c) C($c-trend-up"}).getText()
-
+ 
+        # 爬取前五筆餐廳卡片資料
+        cards = soup.find_all(
+            'div', {'class': 'jsx-1776651079 restaurant-info'}, limit=5)
+ 
+        content = ""
+        for card in cards:
+ 
+            title = card.find(  # 餐廳名稱
+                "a", {"class": "jsx-1776651079 title-text"}).getText()
+ 
+            stars = card.find(  # 餐廳評價
+                "div", {"class": "jsx-1207467136 text"}).getText()
+ 
+            address = card.find(  # 餐廳地址
+                "div", {"class": "jsx-1776651079 address-row"}).getText()
+ 
+ 
+            #將取得的餐廳名稱、評價及地址連結一起，並且指派給content變數
+            content += f"{title} \n{stars}顆星 \n{address} \n\n"
+ 
         return content
