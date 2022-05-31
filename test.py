@@ -16,7 +16,7 @@ line_bot_api = LineBotApi('j7hu22/J4MsEH+LFbuJInkn8NvCxa1V0TUfSeiFLoXeQwyxMu2FCW
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('1103901155d758664f42b49765099061')
 
-line_bot_api.push_message('U02fc785bca1c72493e65e003e46b8db0', TextSendMessage(text='請輸入股票代號或名稱'))
+line_bot_api.push_message('U02fc785bca1c72493e65e003e46b8db0', TextSendMessage(text='請輸入股票代號'))
 
 
 # 監聽所有來自 /callback 的 Post Request
@@ -39,12 +39,11 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def  handle_message(event):
     message = text=event.message.text
-    crp = scraper.GetStock(message)
+    crp = scraper.scrape(event.message.Text)
     vec = crp.scrape
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=vec)
+    )
     
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=vec))
-
-
 #主程式
 import os 
 if __name__ == "__main__":
