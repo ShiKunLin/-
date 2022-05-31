@@ -38,11 +38,12 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def  handle_message(event):
-    message = text=event.message.text
+    event.message = text=event.message.text
     
     crp = scraper.scrape(event.message.Text)
 
-    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=crp))
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=crp)
+)
 
 #主程式
 import os 
