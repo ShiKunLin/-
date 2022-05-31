@@ -3,6 +3,7 @@ from flask import Flask,request, abort
 from linebot import(LineBotApi,WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
+import scraper
 
 test = Flask(__name__)
 
@@ -38,10 +39,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def  handle_message(event):
     message = text=event.message.text
-    if event.message.text == "2330":
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="https://tw.stock.yahoo.com/quote/2330.TW"))
-    elif event.message.text == "台積電":
-        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="https://tw.stock.yahoo.com/quote/2330.TW"))
+    crp = scraper.GetStock(message)
+    vec = crp.scrape
+    
+    line_bot_api.reply_message(event.reply_token,TextSendMessage(text=vec))
+
+
 #主程式
 import os 
 if __name__ == "__main__":
