@@ -1,47 +1,28 @@
+from turtle import Vec2D
 from bs4 import BeautifulSoup
-from abc import ABC, abstractmethod
 import requests
+import pandas as pd
+
  
- 
-# 美食抽象類別
-class Food(ABC):
- 
-    def __init__(self, area):
-        self.area = area  # 地區
- 
-    @abstractmethod
-    def scrape(self):
-        pass
- 
- 
-# 愛食記爬蟲
-class IFoodie(Food):
+
+# 股票爬蟲
+class GetStock():
  
     def scrape(self):
         response = requests.get(
-            "https://ifoodie.tw/explore/" + self.area +
-            "/list?sortby=popular&opening=true")
+            "https://tw.stock.yahoo.com/quote/"+self.id+".TW")
  
         soup = BeautifulSoup(response.content, "html.parser")
- 
-        # 爬取前五筆餐廳卡片資料
-        cards = soup.find_all(
-            'div', {'class': 'jsx-1776651079 restaurant-info'}, limit=5)
- 
-        content = ""
-        for card in cards:
- 
-            title = card.find(  # 餐廳名稱
-                "a", {"class": "jsx-1776651079 title-text"}).getText()
- 
-            stars = card.find(  # 餐廳評價
-                "div", {"class": "jsx-1207467136 text"}).getText()
- 
-            address = card.find(  # 餐廳地址
-                "div", {"class": "jsx-1776651079 address-row"}).getText()
- 
- 
-            #將取得的餐廳名稱、評價及地址連結一起，並且指派給content變數
-            content += f"{title} \n{stars}顆星 \n{address} \n\n"
- 
-        return content
+
+        Volumes = soup.find_all(
+            'li',{'class':'price-detail-item H(32px) Mx(16px) D(f) Jc(sb) Ai(c) Bxz(bb) Px(0px) Py(4px) Bdbs(s) Bdbc($bd-primary-divider) Bdbw(1px)'})
+
+        vec = ""
+
+        for Volume in Volumes:
+            vec2 = ""
+            for df in Volume.select("span"):
+                vec2 += df.text + "\t"
+            vec += vec2 + "\n"
+        return vec
+            
